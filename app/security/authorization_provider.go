@@ -24,7 +24,7 @@ func (a *AuthorizationProvider) Init(cfg *config.Config) error {
 // to get Subject's (aka User) access control information such as roles and permissions.
 // It is called by Security Manager.
 func (a *AuthorizationProvider) GetAuthorizationInfo(authcInfo *authc.AuthenticationInfo) *authz.AuthorizationInfo {
-	user, _ := repositories.User.FindByUsername(string(authcInfo.Credential))
+	user, _ := repositories.User.FindByUsername(authcInfo.PrimaryPrincipal().Value)
 	roles := []string{"user"}
 
 	for _, r := range user.Roles {

@@ -9,6 +9,11 @@ type TrainController struct {
 	Controller
 }
 
+
+func (c *TrainController) BeforePost() {
+	c.needRole("admin")
+}
+
 func (c *TrainController) Post(i *models.TrainInput) {
 	if !c.validatePost(i) {
 		return

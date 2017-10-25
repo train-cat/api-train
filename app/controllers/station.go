@@ -22,6 +22,10 @@ func (c *StationController) CGet(f *filters.Station) {
 	c.get(ss, err)
 }
 
+func (c *StationController) BeforePost() {
+	c.needRole("admin")
+}
+
 func (c *StationController) Post(i *models.StationInput) {
 	if !c.validatePost(i) {
 		return

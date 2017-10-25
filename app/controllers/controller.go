@@ -48,6 +48,21 @@ func (c *Controller) get(s rest.Hateoasable, err error) {
 	c.Reply().Ok().JSON(s)
 }
 
+func (c *Controller) needRole(role string) {
+	if !c.Subject().HasRole(role) {
+		c.forbidden()
+	}
+}
+
+func (c *Controller) forbidden() {
+	c.Reply().Forbidden().JSON(aah.Data{
+		"message": "access denied",
+	})
+
+	// abort the flow
+	c.Abort()
+}
+
 func (c *Controller) notFound(s interface{}) bool {
 	if !reflect.ValueOf(s).IsNil() {
 		return false
