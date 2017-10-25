@@ -7,8 +7,8 @@ import (
 
 	"aahframework.org/aah.v0"
 	"gopkg.in/go-playground/validator.v9"
-	"github.com/train-sh/api-train/app/rest"
-	"github.com/train-sh/api-train/app/validators"
+	"github.com/train-cat/api-train/app/rest"
+	"github.com/train-cat/api-train/app/validators"
 )
 
 type Controller struct {

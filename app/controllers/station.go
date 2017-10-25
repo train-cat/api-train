@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/train-sh/api-train/app/models"
-	"github.com/train-sh/api-train/app/repositories"
-	"github.com/train-sh/api-train/app/filters"
+	"github.com/train-cat/api-train/app/models"
+	"github.com/train-cat/api-train/app/repositories"
+	"github.com/train-cat/api-train/app/filters"
 )
 
 type StationController struct {

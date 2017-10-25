@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"aahframework.org/aah.v0"
-	"github.com/train-sh/api-train/app/rest"
+	"github.com/train-cat/api-train/app/rest"
 )
 
 type (

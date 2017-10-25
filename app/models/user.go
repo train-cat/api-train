@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/train-sh/api-train/app/rest"
+	"github.com/train-cat/api-train/app/rest"
 	"golang.org/x/crypto/bcrypt"
 	"aahframework.org/aah.v0"
 )

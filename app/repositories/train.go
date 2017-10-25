@@ -1,6 +1,6 @@
 package repositories
 
-import "github.com/train-sh/api-train/app/models"
+import "github.com/train-cat/api-train/app/models"
 
 type train struct{}
 

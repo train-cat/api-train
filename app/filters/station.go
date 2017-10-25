@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/jinzhu/gorm"
 	"fmt"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Station struct {

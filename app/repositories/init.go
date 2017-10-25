@@ -9,7 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	// Load MySQL driver
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	code "github.com/train-sh/api-train/app/errors"
+	code "github.com/train-cat/api-train/app/errors"
 )
 
 var db *gorm.DB

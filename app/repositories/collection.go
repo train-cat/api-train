@@ -4,9 +4,9 @@ import (
 	"math"
 
 	"github.com/jinzhu/gorm"
-	"github.com/train-sh/api-train/app/filters"
-	"github.com/train-sh/api-train/app/models"
-	"github.com/train-sh/api-train/app/rest"
+	"github.com/train-cat/api-train/app/filters"
+	"github.com/train-cat/api-train/app/models"
+	"github.com/train-cat/api-train/app/rest"
 )
 
 func NewCollection(f filters.Filter, db *gorm.DB, v interface{}) (*models.Collection, error) {

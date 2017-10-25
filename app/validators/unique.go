@@ -2,7 +2,7 @@ package validators
 
 import (
 	"aahframework.org/log.v0"
-	"github.com/train-sh/api-train/app/repositories"
+	"github.com/train-cat/api-train/app/repositories"
 	"gopkg.in/go-playground/validator.v9"
 )
 
