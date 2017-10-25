@@ -10,6 +10,12 @@ type TrainController struct {
 }
 
 
+func (c *TrainController) Get(code string) {
+	t, err := repositories.Train.FindOneByCode(code)
+
+	c.get(t, err)
+}
+
 func (c *TrainController) BeforePost() {
 	c.needRole("admin")
 }

@@ -15,6 +15,7 @@ type (
 	Train struct {
 		Entity
 		TrainData
+		Terminus *Station `gorm:"ForeignKey:TerminusID" json:"-"`
 		rest.Hateoas
 	}
 
@@ -26,10 +27,18 @@ func (i *TrainInput) ToEntity() *Train {
 }
 
 func (t *Train) GenerateHateoas(ctx *aah.Context) error {
-	t.Links = rest.Links{
-		"self": rest.Link{
-			//Href: rest.GenerateURI(ctx, "get_train"),
-			Href: "toto",
+	if err := t.Terminus.GenerateHateoas(ctx); err != nil {
+		return err
+	}
+
+	t.Hateoas = rest.Hateoas{
+		Embedded: rest.Embedded{
+			"terminus": t.Terminus,
+		},
+		Links: rest.Links{
+			"self": rest.Link{
+				Href: rest.GenerateURI(ctx, "get_train", *t.Code),
+			},
 		},
 	}
 

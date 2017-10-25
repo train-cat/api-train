@@ -52,11 +52,5 @@ func (i *UserInput) ToEntity() (*User, error) {
 }
 
 func (u *User) GenerateHateoas(ctx *aah.Context) error {
-	u.Links = rest.Links{
-		"self": rest.Link{
-		//	Href: rest.GenerateURI(ctx, "get_user", u.ID),
-		},
-	}
-
 	return nil
 }
