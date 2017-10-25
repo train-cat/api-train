@@ -7,9 +7,9 @@ import (
 
 type (
 	TrainData struct {
-		Code       *string `gorm:"code"        json:"code"        validate:"required,len=6"`
-		Mission    *string `gorm:"mission"     json:"mission"     validate:"required,len=4"`
-		TerminusID *int    `gorm:"terminus_id" json:"terminus_id" validate:"omitempty,station_id"`
+		Code       *string `gorm:"column:code"        json:"code"        validate:"required,len=6"`
+		Mission    *string `gorm:"column:mission"     json:"mission"     validate:"required,len=4"`
+		TerminusID *int    `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,station_id"`
 	}
 
 	Train struct {

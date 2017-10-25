@@ -30,9 +30,9 @@ func (s *Station) GenerateHateoas(ctx *aah.Context) error {
 		"self": rest.Link{
 			Href: rest.GenerateURI(ctx, "get_station", s.ID),
 		},
-		/*"stops": rest.Link{
-			Href: rest.GenerateURI(ctx, "cget_stops", s.ID),
-		},*/
+		"stops": rest.Link{
+			Href: rest.GenerateURI(ctx, "cget_station_stops", s.ID),
+		},
 	}
 
 	return nil
