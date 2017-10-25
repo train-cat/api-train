@@ -1,9 +1,9 @@
 package models
 
 import (
+	"aahframework.org/aah.v0"
 	"github.com/train-cat/api-train/app/rest"
 	"golang.org/x/crypto/bcrypt"
-	"aahframework.org/aah.v0"
 )
 
 const costBcrypt = 13
@@ -18,7 +18,8 @@ type (
 	User struct {
 		Entity
 		UserData
-		EncodedPassword string `gorm:"column:password" json:"-"`
+		EncodedPassword string      `gorm:"column:password" json:"-"`
+		Roles           SliceString `gorm:"column:roles"    json:"roles"`
 		rest.Hateoas
 	}
 

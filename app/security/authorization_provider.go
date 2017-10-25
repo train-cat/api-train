@@ -4,6 +4,7 @@ import (
 	"aahframework.org/config.v0"
 	"aahframework.org/security.v0/authc"
 	"aahframework.org/security.v0/authz"
+	"github.com/train-cat/api-train/app/repositories"
 )
 
 var _ authz.Authorizer = (*AuthorizationProvider)(nil)
@@ -23,8 +24,15 @@ func (a *AuthorizationProvider) Init(cfg *config.Config) error {
 // to get Subject's (aka User) access control information such as roles and permissions.
 // It is called by Security Manager.
 func (a *AuthorizationProvider) GetAuthorizationInfo(authcInfo *authc.AuthenticationInfo) *authz.AuthorizationInfo {
+	user, _ := repositories.User.FindByUsername(string(authcInfo.Credential))
+	roles := []string{"user"}
+
+	for _, r := range user.Roles {
+		roles = append(roles, r)
+	}
+
 	authzInfo := authz.NewAuthorizationInfo()
-	authzInfo.AddRole("user")
+	authzInfo.AddRole(roles...)
 	// authzInfo.AddPermissionString(authorities.Permissions...)
 
 	return authzInfo
