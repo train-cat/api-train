@@ -1,0 +1,431 @@
+swagger: '2.0'
+info:
+  description: Documentation for `api.train.cat`
+  version: 1.0.0
+  title: API train-cat
+host: api.train.cat
+tags:
+  - name: station
+  - name: stop
+  - name: train
+  - name: user
+schemes:
+  - https
+paths:
+  /stations:
+    get:
+      tags:
+        - station
+      summary: List all stations
+      operationId: cget_stations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: query
+          type: integer
+          name: _page
+          description: Current page
+          default: 1
+          required: false
+        - in: query
+          type: integer
+          name: _max_per_page
+          description: Max result per page
+          default: 20
+          minimum: 1
+          maximum: 100
+          required: false
+        - in: query
+          type: string
+          name: 'filter[name]'
+          description: Search by name
+          required: false
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Collection'
+        '400':
+          description: Something is wrong with the filters
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Page not found
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - station
+      summary: Create new station
+      operationId: post_station
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: header
+          description: Authentification token
+          type: string
+          name: Authorization
+          default: Bearer <token>
+        - in: body
+          name: station
+          schema:
+            $ref: '#/definitions/StationInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Station'
+        '400':
+          description: Something is wrong with the value
+        '401':
+          description: You should be authentified
+        '403':
+          description: You have not the permission
+  '/stations/{station_id}':
+    get:
+      tags:
+        - station
+      summary: Retrieve a station
+      operationId: get_stations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: path
+          type: integer
+          name: station_id
+          description: Unique identifier of the station
+          required: true
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Station'
+        '404':
+          description: Resource Not Found
+          schema:
+            $ref: '#/definitions/Error'
+  '/stations/{station_id}/stops':
+    get:
+      tags:
+        - stop
+      summary: List all stops for one station
+      operationId: cget_stop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: path
+          type: integer
+          name: station_id
+          description: Unique identifier of the station
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Collection'
+  /trains:
+    post:
+      tags:
+        - train
+      summary: Create new train
+      operationId: post_train
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: header
+          description: Authentification token
+          type: string
+          name: Authorization
+          default: Bearer <token>
+        - in: body
+          name: train
+          schema:
+            $ref: '#/definitions/TrainInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Train'
+        '400':
+          description: Something is wrong with the value
+        '401':
+          description: You should be authentified
+        '403':
+          description: You have not the permission
+  '/trains/{code}':
+    get:
+      tags:
+        - train
+      summary: Retrieve a train
+      operationId: get_train
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          type: integer
+          name: code
+          description: Unique code of the train
+          required: true
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Train'
+        '404':
+          description: resource not found
+          schema:
+            $ref: '#/definitions/Error'
+  /users:
+    post:
+      tags:
+        - user
+      summary: Create new user
+      operationId: post_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: body
+          name: user
+          schema:
+            $ref: '#/definitions/UserInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Something is wrong with the value
+  /login:
+    post:
+      tags:
+        - user
+      summary: Login user
+      operationId: login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: body
+          name: user
+          schema:
+            $ref: '#/definitions/UserToken'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Token'
+        '400':
+          description: Bad Credentials
+definitions:
+  Collection:
+    type: object
+    properties:
+      page:
+        type: integer
+        format: int
+      pages:
+        type: integer
+        format: int
+      limit:
+        type: integer
+        format: int
+      total:
+        type: integer
+        format: int
+      _embedded:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              type: object
+              description: Collection of entity
+  Link:
+    type: object
+    properties:
+      href:
+        type: string
+  Station:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int
+      name:
+        type: string
+      _links:
+        type: object
+        properties:
+          self:
+            $ref: '#/definitions/Link'
+          stop:
+            $ref: '#/definitions/Link'
+  StationInput:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Station name
+        minLength: 2
+        maxLength: 255
+      uic:
+        description: Code UIC for the station
+        type: string
+        minLength: 8
+        maxLength: 8
+      is_realtime:
+        description: If the station is available for realtime API
+        type: boolean
+  Train:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: ID of the train
+      code:
+        type: string
+        description: Unique code of the train
+      mission:
+        type: string
+        description: Mission of the train (4 letters)
+      _links:
+        type: object
+        properties:
+          self:
+            $ref: '#/definitions/Link'
+      _embedded:
+        type: object
+        properties:
+          terminus:
+            $ref: '#/definitions/Station'
+  TrainInput:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Unique identifier for one train
+        minLength: 6
+        maxLength: 6
+      mission:
+        type: string
+        description: Mission of the train
+        minLength: 4
+        maxLength: 4
+      terminus_id:
+        type: integer
+        description: Station ID of the terminus
+  Stop:
+    type: object
+    properties:
+      id:
+        type: integer
+      schedule:
+        type: string
+        description: 'hh:mm of the stop'
+      on_week:
+        type: boolean
+        description: True if train is on week
+      _embedded:
+        type: object
+        properties:
+          mission:
+            type: string
+          terminus:
+            $ref: '#/definitions/Station'
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+      roles:
+        type: array
+        items:
+          type: string
+  UserInput:
+    type: object
+    properties:
+      username:
+        type: string
+        minLength: 2
+        maxLength: 255
+      email:
+        type: string
+        maxLength: 255
+      password:
+        type: string
+        minLength: 6
+        maxLength: 255
+  UserToken:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
