@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"encoding/json"
 
 	"aahframework.org/aah.v0"
@@ -10,19 +8,19 @@ import (
 )
 
 type (
-	// Todo validation + StopInput
+	// TODO validation
 	StopData struct {
-		Time      *time.Time `gorm:"column:time"    json:"schedule"`
-		IsWeek    *bool      `gorm:"column:is_week" json:"is_week"`
-		StationID *uint      `gorm:"-"              json:"station_id"`
-		TrainID   *uint      `gorm:"-"              json:"-"`
+		Time   *Schedule `gorm:"column:schedule" json:"schedule" validate:"required"`
+		IsWeek *bool     `gorm:"column:is_week"  json:"is_week"`
 	}
 
 	Stop struct {
 		Entity
 		StopData
-		Station *Station `gorm:"ForeignKey:StationID" json:"-"`
-		Train   *Train   `gorm:"ForeignKey:TrainID"   json:"-"`
+		StationID uint     `gorm:"column:station_id"    json:"station_id"`
+		TrainID   uint     `gorm:"column:train_id"      json:"-"`
+		Station   *Station `gorm:"ForeignKey:StationID" json:"-"`
+		Train     *Train   `gorm:"ForeignKey:TrainID"   json:"-"`
 		rest.Hateoas
 	}
 
@@ -32,7 +30,13 @@ type (
 		OnWeek   bool   `json:"on_week"`
 		rest.Hateoas
 	}
+
+	StopInput StopData
 )
+
+func (i *StopInput) ToEntity() *Stop {
+	return &Stop{StopData: StopData(*i)}
+}
 
 func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 	if s.Train.Terminus != nil {
@@ -48,6 +52,9 @@ func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 			"train": rest.Link{
 				Href: rest.GenerateURI(ctx, "get_train", *s.Train.Code),
 			},
+			"station": rest.Link{
+				Href: rest.GenerateURI(ctx, "get_station", s.StationID),
+			},
 		},
 		Embedded: rest.Embedded{
 			"mission":  s.Train.Mission,
@@ -56,18 +63,13 @@ func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 	}
 
 	return nil
-
 }
 
 func (s Stop) MarshalJSON() ([]byte, error) {
 	return json.Marshal(StopOutput{
 		ID:       s.ID,
-		Schedule: s.Time.Format("15:04"),
+		Schedule: s.Time.String(),
 		OnWeek:   *s.IsWeek,
 		Hateoas:  s.Hateoas,
 	})
-}
-
-func (s Stop) TableName() string {
-	return "passage"
 }

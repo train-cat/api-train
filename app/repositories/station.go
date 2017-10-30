@@ -1,9 +1,12 @@
 package repositories
 
 import (
-	"github.com/train-cat/api-train/app/models"
+	"strconv"
+
+	"aahframework.org/log.v0"
 	"github.com/jinzhu/gorm"
 	"github.com/train-cat/api-train/app/filters"
+	"github.com/train-cat/api-train/app/models"
 )
 
 type station struct{}
@@ -36,4 +39,14 @@ func (_ station) FindOne(stationID int) (*models.Station, error) {
 	}
 
 	return s, err
+}
+
+func (_ station) IsExist(stationID int) bool {
+	exist, err := ValueExist(&models.Station{}, "id", strconv.Itoa(stationID))
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	return exist
 }

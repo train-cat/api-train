@@ -9,6 +9,10 @@ type stop struct{}
 
 var Stop stop
 
+func (_ stop) Persist(s *models.Stop) error {
+	return db.Save(s).Error
+}
+
 func (_ stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collection, error) {
 	stops := []*models.Stop{}
 

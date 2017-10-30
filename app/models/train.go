@@ -7,9 +7,9 @@ import (
 
 type (
 	TrainData struct {
-		Code       *string `gorm:"column:code"        json:"code"        validate:"required,len=6"`
+		Code       *string `gorm:"column:code"        json:"code"        validate:"required,len=6,unique=code"`
 		Mission    *string `gorm:"column:mission"     json:"mission"     validate:"required,len=4"`
-		TerminusID *int    `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,station_id"`
+		TerminusID *int    `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,foreign_key=station"`
 	}
 
 	Train struct {
@@ -26,9 +26,16 @@ func (i *TrainInput) ToEntity() *Train {
 	return &Train{TrainData: TrainData(*i)}
 }
 
+// TableName return the table for gorm, used for 'unique' validation
+func (i *TrainInput) TableName() string {
+	return "train"
+}
+
 func (t *Train) GenerateHateoas(ctx *aah.Context) error {
-	if err := t.Terminus.GenerateHateoas(ctx); err != nil {
-		return err
+	if t.Terminus != nil {
+		if err := t.Terminus.GenerateHateoas(ctx); err != nil {
+			return err
+		}
 	}
 
 	t.Hateoas = rest.Hateoas{

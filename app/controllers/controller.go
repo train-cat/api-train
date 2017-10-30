@@ -49,31 +49,52 @@ func (c *Controller) get(s rest.Hateoasable, err error) {
 }
 
 func (c *Controller) needRole(role string) {
+	abort := false
+
+	if c.Subject() == nil {
+		c.unauthorizedResponse()
+		abort = true
+	}
+
 	if !c.Subject().HasRole(role) {
-		c.forbidden()
+		c.forbiddenResponse()
+		abort = true
+	}
+
+	if abort {
+		c.Abort()
 	}
 }
 
-func (c *Controller) forbidden() {
-	c.Reply().Forbidden().JSON(aah.Data{
-		"message": "access denied",
-	})
-
-	// abort the flow
-	c.Abort()
-}
 
 func (c *Controller) notFound(s interface{}) bool {
 	if !reflect.ValueOf(s).IsNil() {
 		return false
 	}
 
+	c.notFoundResponse()
+
+	return true
+}
+
+// === shortcut response ===
+func (c *Controller) unauthorizedResponse() {
+	c.Reply().Unauthorized().JSON(aah.Data{
+		"message": "access denied",
+	})
+}
+
+func (c *Controller) forbiddenResponse() {
+	c.Reply().Forbidden().JSON(aah.Data{
+		"message": "access denied",
+	})
+}
+
+func (c *Controller) notFoundResponse() {
 	c.Reply().NotFound().JSON(aah.Error{
 		Code: http.StatusNotFound,
 		Message: "Not Found",
 	})
-
-	return true
 }
 
 func (c *Controller) badRequestResponse(errs error) {
@@ -87,6 +108,7 @@ func (c *Controller) badRequestResponse(errs error) {
 
 	c.Reply().BadRequest().JSON(m)
 }
+// === end shortcut response ===
 
 func (c *Controller) hateoas(s rest.Hateoasable) error {
 	return s.GenerateHateoas(c.Context)

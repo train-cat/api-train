@@ -13,3 +13,15 @@ func ValueExist(s interface{}, f string, v string) (bool, error) {
 
 	return count > 0, nil
 }
+
+func IdExist(table string, id int64) (bool, error) {
+	count := 0
+
+	err := db.Table(table).Where("id = ?", id).Count(&count).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

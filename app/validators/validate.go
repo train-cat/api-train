@@ -6,6 +6,8 @@ var validate = validator.New()
 
 func init() {
 	validate.RegisterValidation(tagUnique, UniqueConstraint)
+	validate.RegisterValidation(tagForeignKey, ForeignKeyConstraint)
+	validate.RegisterValidation(tagTrue, TrueConstraint)
 }
 
 func Struct(s interface{}) error {
