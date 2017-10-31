@@ -22,6 +22,21 @@ func (c *StopController) CGetByTrain(code string, f *filters.Pagination) {
 	c.get(ss, err)
 }
 
+func (c *StopController) Head(stationID int, code string) {
+	exist, err := repositories.Stop.IsExist(stationID, code)
+
+	if c.serverError(err) {
+		return
+	}
+
+	if !exist {
+		c.notFoundResponse()
+		return
+	}
+
+	c.Reply().NoContent()
+}
+
 func (c *StopController) BeforeLink() {
 	c.needRole("admin")
 }

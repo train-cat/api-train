@@ -41,3 +41,14 @@ func (_ stop) FindAllByTrain(code string, f filters.Filter) (*models.Collection,
 
 	return NewCollection(f, db, &stops)
 }
+
+func (_ stop) IsExist(stationID int, code string) (bool, error) {
+	count := 0
+
+	err := db.Model(&models.Stop{}).
+		Joins("LEFT JOIN train ON train_id = train.id").
+		Where("train.code = ? AND station_id = ?", code, stationID).
+		Count(&count).Error
+
+	return count > 0, err
+}
