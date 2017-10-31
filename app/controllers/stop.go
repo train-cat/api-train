@@ -10,8 +10,14 @@ type StopController struct {
 	Controller
 }
 
-func (c *StopController) CGet(stationID int, f *filters.Stop) {
+func (c *StopController) CGetByStation(stationID int, f *filters.Stop) {
 	ss, err := repositories.Stop.FindAllByStation(stationID, f)
+
+	c.get(ss, err)
+}
+
+func (c *StopController) CGetByTrain(code string, f *filters.Pagination) {
+	ss, err := repositories.Stop.FindAllByTrain(code, f)
 
 	c.get(ss, err)
 }

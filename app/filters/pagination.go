@@ -36,3 +36,7 @@ func (p *Pagination) ApplyPagination(db *gorm.DB) *gorm.DB {
 		Offset((p.GetPage() - 1) * p.GetLimit()).
 		Limit(p.GetLimit())
 }
+
+func (p *Pagination) ApplyFilter(db *gorm.DB) *gorm.DB {
+	return db
+}

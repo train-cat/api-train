@@ -32,7 +32,13 @@ func (s *Schedule) Scan(value interface{}) error {
 		return nil
 	}
 
-	if t, ok := value.(time.Time); ok {
+	if strTime, ok := value.([]uint8); ok {
+		t, err := time.Parse("15:04:05", string(strTime))
+
+		if err != nil {
+			return err
+		}
+
 		*s = Schedule{uint(t.Hour()), uint(t.Minute()), true}
 		return nil
 	}
