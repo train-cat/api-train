@@ -62,6 +62,16 @@ func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 		},
 	}
 
+	if s.Station != nil {
+		err := s.Station.GenerateHateoas(ctx)
+
+		if err != nil {
+			return err
+		}
+
+		s.Hateoas.Embedded["station"] = s.Station
+	}
+
 	return nil
 }
 

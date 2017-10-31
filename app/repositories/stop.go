@@ -22,6 +22,7 @@ func (_ stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collect
 		Preload("Train.Terminus").
 		Joins("LEFT JOIN train ON train_id = train.id").
 		Joins("LEFT JOIN station ON terminus_id = station.id").
+		Order("schedule ASC").
 		Where("station_id = ?", stationID)
 
 	return NewCollection(f, db, &stops)
