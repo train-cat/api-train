@@ -34,6 +34,14 @@ func (r action) Persist(i *models.ActionInput) (*models.Action, error) {
 	return a, err
 }
 
+func (_ action) FindOne(id uint) (*models.Action, error) {
+	a := &models.Action{}
+
+	err := db.Where("id = ?", id).First(a).Error
+
+	return a, err
+}
+
 func (_ action) FindByUUID(uuid string) (*models.Action, error) {
 	e := &models.Action{}
 

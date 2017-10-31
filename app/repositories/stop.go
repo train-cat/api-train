@@ -43,6 +43,19 @@ func (_ stop) FindAllByTrain(code string, f filters.Filter) (*models.Collection,
 	return NewCollection(f, db, &stops)
 }
 
+func (_ stop) FindOneByStationAndCode(stationID int, code string) (*models.Stop, error) {
+	stop := &models.Stop{}
+
+	err := db.
+		Preload("Station").
+		Preload("Train").
+		Joins("LEFT JOIN train ON train_id = train.id").
+		Where("code = ? AND station_id = ?", code, stationID).
+		First(stop).Error
+
+	return stop, err
+}
+
 func (_ stop) IsExist(stationID int, code string) (bool, error) {
 	count := 0
 

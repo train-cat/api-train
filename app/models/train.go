@@ -9,7 +9,7 @@ type (
 	TrainData struct {
 		Code       *string `gorm:"column:code"        json:"code"        validate:"required,len=6,unique=code"`
 		Mission    *string `gorm:"column:mission"     json:"mission"     validate:"required,len=4"`
-		TerminusID *int    `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,foreign_key=station"`
+		TerminusID *uint   `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,foreign_key=station"`
 	}
 
 	Train struct {

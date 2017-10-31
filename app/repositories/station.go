@@ -29,7 +29,7 @@ func (_ station) FindAll(f filters.Filter) (*models.Collection, error) {
 	return NewCollection(f, db, &stations)
 }
 
-func (_ station) FindOne(stationID int) (*models.Station, error) {
+func (_ station) FindOne(stationID uint) (*models.Station, error) {
 	s := &models.Station{}
 
 	err := db.Where("id = ?", stationID).First(s).Error

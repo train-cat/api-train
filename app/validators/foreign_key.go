@@ -9,7 +9,7 @@ import (
 const tagForeignKey = "foreign_key"
 
 func ForeignKeyConstraint(f validator.FieldLevel) bool {
-	exist, err := repositories.IdExist(f.Param(), f.Field().Int())
+	exist, err := repositories.IdExist(f.Param(), f.Field().Uint())
 
 	if err != nil {
 		log.Error(err)

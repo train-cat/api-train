@@ -10,7 +10,7 @@ type StationController struct {
 	Controller
 }
 
-func (c *StationController) Get(stationID int) {
+func (c *StationController) Get(stationID uint) {
 	s, err := repositories.Station.FindOne(stationID)
 
 	c.get(s, err)

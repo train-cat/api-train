@@ -41,7 +41,7 @@ func (c *StopController) BeforeLink() {
 	c.needRole("admin")
 }
 
-func (c *StopController) Link(stationID int, code string, i *models.StopInput) {
+func (c *StopController) Link(stationID uint, code string, i *models.StopInput) {
 	s, sErr := repositories.Station.FindOne(stationID)
 	t, tErr := repositories.Train.FindOneByCode(code)
 
