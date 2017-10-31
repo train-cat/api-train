@@ -8,6 +8,7 @@ func init() {
 	validate.RegisterValidation(tagUnique, UniqueConstraint)
 	validate.RegisterValidation(tagForeignKey, ForeignKeyConstraint)
 	validate.RegisterValidation(tagTrue, TrueConstraint)
+	validate.RegisterValidation(tagActionType, ActionTypeConstraint)
 }
 
 func Struct(s interface{}) error {
