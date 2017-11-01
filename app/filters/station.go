@@ -9,12 +9,12 @@ import (
 // Station filter
 type Station struct {
 	Pagination
-	Name *string `bind:"name"`
+	Name string `bind:"name"`
 }
 
 // ApplyFilter on query
 func (f *Station) ApplyFilter(db *gorm.DB) *gorm.DB {
-	if f.Name != nil {
+	if f.Name != "" {
 		db = db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", *f.Name))
 	}
 
