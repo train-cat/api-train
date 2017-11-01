@@ -235,12 +235,11 @@ paths:
           description: something goes wrong with the filters
         '404':
           description: Train Not Found
-  '/stations/{station_id}/trains/{code}':
+  '/stations/{station_id}/trains/{code}/stops':
     post:
       tags:
         - stop
       summary: Add train stop to a station
-      description: "USE *LINK* METHOD INSTEAD OF POST (swagger doesn't support it)"
       operationId: link_station_train
       consumes:
         - application/json

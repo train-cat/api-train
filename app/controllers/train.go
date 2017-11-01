@@ -10,6 +10,18 @@ type TrainController struct {
 	Controller
 }
 
+// Head return 204 if train exist
+func (c *TrainController) Head(code string) {
+	exist := repositories.Train.IsExist(code)
+
+	if !exist {
+		c.notFoundResponse()
+		return
+	}
+
+	c.Reply().NoContent()
+}
+
 // Get return one train
 func (c *TrainController) Get(code string) {
 	t, err := repositories.Train.FindOneByCode(code)

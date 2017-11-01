@@ -4,6 +4,7 @@ import (
 	"github.com/train-cat/api-train/app/filters"
 	"github.com/train-cat/api-train/app/models"
 	"github.com/train-cat/api-train/app/repositories"
+	"aahframework.org/aah.v0"
 )
 
 // StopController regroup all endpoints concern stop
@@ -26,7 +27,7 @@ func (c *StopController) CGetByTrain(code string, f *filters.Pagination) {
 }
 
 // Head allow to know is specific station is deserve by a train
-func (c *StopController) Head(stationID int, code string) {
+func (c *StopController) Head(stationID uint, code string) {
 	exist, err := repositories.Stop.IsExist(stationID, code)
 
 	if c.serverError(err) {
@@ -41,19 +42,25 @@ func (c *StopController) Head(stationID int, code string) {
 	c.Reply().NoContent()
 }
 
-// BeforeLink verify is user is allowed to link station with a train
-func (c *StopController) BeforeLink() {
+// BeforePost verify is user is allowed to link station with a train
+func (c *StopController) BeforePost() {
 	c.needRole("admin")
 }
 
-// Link allow to create new stop between one station and one train
-func (c *StopController) Link(stationID uint, code string, i *models.StopInput) {
+// Post allow to create new stop between one station and one train
+func (c *StopController) Post(stationID uint, code string, i *models.StopInput) {
 	s, sErr := repositories.Station.FindOne(stationID)
 	t, tErr := repositories.Train.FindOneByCode(code)
+	exist, eErr := repositories.Stop.IsExist(stationID, code)
 
-	if c.serverError(sErr) || c.serverError(tErr) || // 500
+	if c.serverError(sErr) || c.serverError(tErr) || c.serverError(eErr) || // 500
 		c.notFound(s) || c.notFound(t) || // 404
 		!c.validatePost(i) { // 400
+		return
+	}
+
+	if exist {
+		c.Reply().Conflict().JSON(aah.Error{})
 		return
 	}
 

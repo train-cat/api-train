@@ -63,7 +63,7 @@ func (r stop) FindOneByStationAndCode(stationID int, code string) (*models.Stop,
 }
 
 // IsExist return true if stop between stationID and code train exist
-func (r stop) IsExist(stationID int, code string) (bool, error) {
+func (r stop) IsExist(stationID uint, code string) (bool, error) {
 	count := 0
 
 	err := db.Model(&models.Stop{}).
