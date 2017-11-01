@@ -9,10 +9,12 @@ tags:
   - name: stop
   - name: train
   - name: user
+  - name: action
+  - name: alert
 schemes:
   - https
 paths:
-  /stations:
+  '/stations':
     get:
       tags:
         - station
@@ -44,7 +46,7 @@ paths:
           required: false
         - in: query
           type: string
-          name: 'filter[name]'
+          name: 'name'
           description: Search by name
           required: false
       responses:
@@ -130,7 +132,7 @@ paths:
       tags:
         - stop
       summary: List all stops for one station
-      operationId: cget_stop
+      operationId: cget_station_stops
       consumes:
         - application/json
       produces:
@@ -146,12 +148,198 @@ paths:
           name: station_id
           description: Unique identifier of the station
           required: true
+        - in: query
+          type: integer
+          name: _page
+          description: Current page
+          default: 1
+          required: false
+        - in: query
+          type: integer
+          name: _max_per_page
+          description: Max result per page
+          default: 20
+          minimum: 1
+          maximum: 100
+          required: false
+        - in: query
+          type: string
+          name: 'terminus_id'
+          description: Search by terminus ID
+          required: false
+        - in: query
+          type: string
+          name: 'terminus_name'
+          description: Search by terminus name
+          required: false
+        - in: query
+          type: string
+          name: 'mission'
+          description: Search by mission
+          required: false
+        - in: query
+          type: string
+          name: 'train_through_station_id'
+          description: Search by train through a specific station ID
+          required: false
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/Collection'
-  /trains:
+        '400':
+          description: something goes wrong with the filters
+        '404':
+          description: Station Not Found
+  '/trains/{code}/stops':
+    get:
+      tags:
+        - stop
+      summary: List all stops for one train
+      operationId: cget_train_stops
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: path
+          type: string
+          name: code
+          description: Unique identifier of the train
+          required: true
+        - in: query
+          type: integer
+          name: _page
+          description: Current page
+          default: 1
+          required: false
+        - in: query
+          type: integer
+          name: _max_per_page
+          description: Max result per page
+          default: 20
+          minimum: 1
+          maximum: 100
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Collection'
+        '400':
+          description: something goes wrong with the filters
+        '404':
+          description: Train Not Found
+  '/stations/{station_id}/trains/{code}':
+    post:
+      tags:
+        - stop
+      summary: Add train stop to a station
+      description: "USE *LINK* METHOD INSTEAD OF POST (swagger doesn't support it)"
+      operationId: link_station_train
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          type: integer
+          name: station_id
+          description: Unique identifier of the train
+          required: true
+        - in: path
+          type: string
+          name: code
+          description: Unique identifier of the train
+          required: true
+        - in: body
+          name: stop
+          schema:
+            $ref: '#/definitions/StopInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Stop'
+        '400':
+          description: Something is wrong with the value
+        '401':
+          description: You should be authentified
+        '403':
+          description: You have not the permission
+    head:
+      tags:
+        - stop
+      summary: To know if a train stop at the station
+      operationId: head_station_train
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: path
+          type: integer
+          name: station_id
+          description: Unique identifier of the train
+          required: true
+        - in: path
+          type: string
+          name: code
+          description: Unique identifier of the train
+          required: true
+      responses:
+        '204':
+          description: Train stop at this station
+        '404':
+          description: Train don't stop at this station
+  '/stations/{station_id}/trains/{code}/alerts':
+    post:
+      tags:
+        - alert
+      summary: Create new alert for one stop
+      operationId: post_alert
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: path
+          type: integer
+          name: station_id
+          description: Unique identifier of the train
+          required: true
+        - in: path
+          type: string
+          name: code
+          description: Unique identifier of the train
+          required: true
+        - in: body
+          name: stop
+          schema:
+            $ref: '#/definitions/AlertInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Alert'
+        '400':
+          description: Something is wrong with the value
+        '401':
+          description: You should be authentified
+        '403':
+          description: You have not the permission
+  '/trains':
     post:
       tags:
         - train
@@ -215,7 +403,7 @@ paths:
           description: resource not found
           schema:
             $ref: '#/definitions/Error'
-  /users:
+  '/users':
     post:
       tags:
         - user
@@ -242,7 +430,7 @@ paths:
             $ref: '#/definitions/User'
         '400':
           description: Something is wrong with the value
-  /login:
+  '/login':
     post:
       tags:
         - user
@@ -269,6 +457,43 @@ paths:
             $ref: '#/definitions/Token'
         '400':
           description: Bad Credentials
+  '/actions':
+    post:
+      tags:
+        - action
+      summary: Create method for be notified
+      operationId: post_action
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: header
+          description: Token of the user
+          type: string
+          name: Authoriration
+          default: Bearer <token>
+        - in: body
+          name: action
+          schema:
+            $ref: '#/definitions/ActionInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Action'
+        '400':
+          description: Something is wrong with the value
+        '401':
+          description: You should be authentified
+        '403':
+          description: You have not the permission
+
 definitions:
   Collection:
     type: object
@@ -293,6 +518,7 @@ definitions:
             items:
               type: object
               description: Collection of entity
+
   Link:
     type: object
     properties:
@@ -313,6 +539,7 @@ definitions:
             $ref: '#/definitions/Link'
           stop:
             $ref: '#/definitions/Link'
+
   StationInput:
     type: object
     properties:
@@ -329,6 +556,7 @@ definitions:
       is_realtime:
         description: If the station is available for realtime API
         type: boolean
+
   Train:
     type: object
     properties:
@@ -351,6 +579,7 @@ definitions:
         properties:
           terminus:
             $ref: '#/definitions/Station'
+
   TrainInput:
     type: object
     properties:
@@ -367,6 +596,7 @@ definitions:
       terminus_id:
         type: integer
         description: Station ID of the terminus
+
   Stop:
     type: object
     properties:
@@ -385,6 +615,17 @@ definitions:
             type: string
           terminus:
             $ref: '#/definitions/Station'
+
+  StopInput:
+    type: object
+    properties:
+      schedule:
+        type: string
+        pattern: "[09]{1,2}:[09]{1,2}"
+      is_week:
+        type: boolean
+        default: false
+
   User:
     type: object
     properties:
@@ -398,6 +639,7 @@ definitions:
         type: array
         items:
           type: string
+
   UserInput:
     type: object
     properties:
@@ -412,6 +654,7 @@ definitions:
         type: string
         minLength: 6
         maxLength: 255
+
   UserToken:
     type: object
     properties:
@@ -419,11 +662,66 @@ definitions:
         type: string
       password:
         type: string
+
   Token:
     type: object
     properties:
       token:
         type: string
+
+  Action:
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+        pattern: 'messenger'
+      data:
+        type: object
+      _links:
+        type: object
+        properties:
+          self:
+            $ref: '#/definitions/Link'
+
+  ActionInput:
+    type: object
+    properties:
+      type:
+        type: string
+        pattern: 'messenger'
+      data:
+        type: object
+
+  Alert:
+    type: object
+    properties:
+      id:
+        type: integer
+      action_id:
+        type: integer
+      _embedded:
+        type: object
+        properties:
+          action:
+            $ref: '#/definitions/Action'
+          station:
+            $ref: '#/definitions/Station'
+      _links:
+        type: object
+        properties:
+          self:
+            $ref: '#/definitions/Link'
+          train:
+            $ref: '#/definitions/Link'
+
+  AlertInput:
+    type: object
+    properties:
+      action_id:
+        type: integer
+
   Error:
     type: object
     properties:
