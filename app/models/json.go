@@ -6,15 +6,18 @@ import (
 	"errors"
 )
 
-type Json map[string]string
+// JSON is alias of map[string]string
+type JSON map[string]string
 
-func (j Json) Value() (driver.Value, error) {
+// Value transform Json to friendly value for database
+func (j JSON) Value() (driver.Value, error) {
 	return json.Marshal(j)
 }
 
-func (j *Json) Scan(value interface{}) error {
+// Scan retrieve value from database
+func (j *JSON) Scan(value interface{}) error {
 	if value == nil {
-		*j = Json{}
+		*j = JSON{}
 		return nil
 	}
 
@@ -26,7 +29,8 @@ func (j *Json) Scan(value interface{}) error {
 	return errors.New("can't cast Json to map[string]string")
 }
 
-func (j *Json) Get(field string, fallback string) string {
+// Get return value in a given key, or fallback if key not exist
+func (j *JSON) Get(field string, fallback string) string {
 	m := map[string]string(*j)
 
 	if v, ok := m[field]; ok {

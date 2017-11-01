@@ -4,9 +4,11 @@ import "github.com/train-cat/api-train/app/models"
 
 type alert struct{}
 
+// Alert namespace
 var Alert alert
 
-func (_ alert) Persist(s *models.Stop, i *models.AlertInput) (*models.Alert, error) {
+// Persist on alert in database
+func (r alert) Persist(s *models.Stop, i *models.AlertInput) (*models.Alert, error) {
 	a := i.ToEntity()
 	var err error
 

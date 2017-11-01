@@ -11,9 +11,11 @@ import (
 
 type station struct{}
 
+// Station namespace
 var Station station
 
-func (_ station) Persist(i *models.StationInput) (*models.Station, error) {
+// Persist station in database
+func (r station) Persist(i *models.StationInput) (*models.Station, error) {
 	s := i.ToEntity()
 
 	err := db.Save(s).Error
@@ -21,7 +23,8 @@ func (_ station) Persist(i *models.StationInput) (*models.Station, error) {
 	return s, err
 }
 
-func (_ station) FindAll(f filters.Filter) (*models.Collection, error) {
+// FindAll stations
+func (r station) FindAll(f filters.Filter) (*models.Collection, error) {
 	stations := []*models.Station{}
 
 	db := db.Model(models.Station{}).Where("is_realtime = 1")
@@ -29,7 +32,8 @@ func (_ station) FindAll(f filters.Filter) (*models.Collection, error) {
 	return NewCollection(f, db, &stations)
 }
 
-func (_ station) FindOne(stationID uint) (*models.Station, error) {
+// FindOne station by id
+func (r station) FindOne(stationID uint) (*models.Station, error) {
 	s := &models.Station{}
 
 	err := db.Where("id = ?", stationID).First(s).Error
@@ -41,7 +45,8 @@ func (_ station) FindOne(stationID uint) (*models.Station, error) {
 	return s, err
 }
 
-func (_ station) IsExist(stationID int) bool {
+// IsExist return true if stationID exist
+func (r station) IsExist(stationID int) bool {
 	exist, err := ValueExist(&models.Station{}, "id", strconv.Itoa(stationID))
 
 	if err != nil {

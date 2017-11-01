@@ -6,10 +6,12 @@ import (
 )
 
 type (
+	// AlertData send by client
 	AlertData struct {
 		ActionID *uint `gorm:"column:action_id" json:"action_id" validate:"foreign_key=action"`
 	}
 
+	// Alert is a watcher for one stop (if issue is detected, action is triggered)
 	Alert struct {
 		Entity
 		AlertData
@@ -20,13 +22,16 @@ type (
 		rest.Hateoas
 	}
 
+	// AlertInput send by client
 	AlertInput AlertData
 )
 
+// ToEntity transform AlertInput to Alert
 func (i *AlertInput) ToEntity() *Alert {
 	return &Alert{AlertData: AlertData(*i)}
 }
 
+// GenerateHateoas content
 func (a *Alert) GenerateHateoas(ctx *aah.Context) error {
 	if err := a.Station.GenerateHateoas(ctx); err != nil {
 		return err

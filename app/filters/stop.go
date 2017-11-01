@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// Stop filters
 type Stop struct {
 	Pagination
 	TerminusID            uint   `bind:"terminus_id"`
@@ -14,6 +15,7 @@ type Stop struct {
 	Mission               string `bind:"mission"`
 }
 
+// ApplyFilter on query
 func (f *Stop) ApplyFilter(db *gorm.DB) *gorm.DB {
 	if f.Mission != "" {
 		db = db.Where("mission = ?", f.Mission)

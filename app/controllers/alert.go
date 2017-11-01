@@ -5,14 +5,18 @@ import (
 	"github.com/train-cat/api-train/app/repositories"
 )
 
+// AlertController regroup all endpoints concern alert
 type AlertController struct {
 	Controller
 }
 
+
+// BeforePost verify if user is allowed to create an alert
 func (c *AlertController) BeforePost() {
 	c.needRole("bot")
 }
 
+// Post create a new alert
 func (c *AlertController) Post(stationID int, code string, i *models.AlertInput) {
 	s, err := repositories.Stop.FindOneByStationAndCode(stationID, code)
 

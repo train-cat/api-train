@@ -11,6 +11,7 @@ import (
 	"github.com/train-cat/api-train/app/validators"
 )
 
+// Controller extend aah.Context
 type Controller struct {
 	*aah.Context
 }

@@ -7,9 +7,11 @@ import (
 
 type user struct {}
 
+// User namespace
 var User user
 
-func (_ user) Persist(i *models.UserInput) (*models.User, error) {
+// Persist user in database
+func (r user) Persist(i *models.UserInput) (*models.User, error) {
 	u, err := i.ToEntity()
 
 	if err != nil {
@@ -21,7 +23,8 @@ func (_ user) Persist(i *models.UserInput) (*models.User, error) {
 	return u, err
 }
 
-func (_ user) FindByUsername(username string) (*models.User, error) {
+// FindByUsername an user
+func (r user) FindByUsername(username string) (*models.User, error) {
 	u := &models.User{}
 
 	err := db.Where("username = ?", username).First(u).Error

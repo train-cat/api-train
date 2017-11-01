@@ -11,6 +11,7 @@ import (
 )
 
 type (
+	// Collection of one entity
 	Collection struct {
 		Page  int `json:"page"`
 		Limit int `json:"limit"`
@@ -20,6 +21,7 @@ type (
 	}
 )
 
+// GenerateHateoas content
 func (c *Collection) GenerateHateoas(ctx *aah.Context) error {
 	u := ctx.Req.Unwrap().URL
 

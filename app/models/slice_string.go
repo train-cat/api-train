@@ -8,12 +8,15 @@ import (
 
 const separator = ","
 
+// SliceString alias for []string
 type SliceString []string
 
+// Value return value can be store in database
 func (s SliceString) Value() (driver.Value, error) {
 	return strings.Join(s, separator), nil
 }
 
+// Scan retrieve value from database
 func (s *SliceString) Scan(value interface{}) error {
 	if value == nil {
 		*s = SliceString{}

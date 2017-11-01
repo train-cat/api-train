@@ -8,6 +8,7 @@ const (
 	maxLimit     = 100
 )
 
+// Pagination query param
 type Pagination struct {
 	Page  int `bind:"_page"`
 	Limit int `bind:"_limit_per_page"`
@@ -31,12 +32,14 @@ func (p *Pagination) GetLimit() int {
 	return p.Limit
 }
 
+// ApplyPagination on query
 func (p *Pagination) ApplyPagination(db *gorm.DB) *gorm.DB {
 	return db.
 		Offset((p.GetPage() - 1) * p.GetLimit()).
 		Limit(p.GetLimit())
 }
 
+// ApplyFilter on query
 func (p *Pagination) ApplyFilter(db *gorm.DB) *gorm.DB {
 	return db
 }

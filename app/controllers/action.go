@@ -5,14 +5,18 @@ import (
 	"github.com/train-cat/api-train/app/repositories"
 )
 
+// ActionController regroup all endpoints concern action
 type ActionController struct {
 	Controller
 }
 
+
+// BeforePost verify if the user is allowed to create an action
 func (c *ActionController) BeforePost() {
 	c.needRole("bot")
 }
 
+// Post create a new action
 func (c *ActionController) Post(i *models.ActionInput) {
 	if !c.validatePost(i) {
 		return

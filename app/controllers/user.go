@@ -12,10 +12,12 @@ import (
 	"github.com/train-cat/api-train/app/security"
 )
 
+// UserController regroup all endpoints concern the user
 type UserController struct {
 	Controller
 }
 
+// Post create new user
 func (c *UserController) Post(i *models.UserInput) {
 	if !c.validatePost(i) {
 		return
@@ -30,6 +32,7 @@ func (c *UserController) Post(i *models.UserInput) {
 	c.Reply().Created().JSON(u)
 }
 
+// Token authenticate one user
 func (c *UserController) Token(t *models.UserToken) {
 	// NOTE: Validation feature is upcoming :)
 	if ess.IsStrEmpty(t.Username) || ess.IsStrEmpty(t.Password) {

@@ -7,8 +7,10 @@ import (
 
 type action struct{}
 
+// Action namespace
 var Action action
 
+// Persist one action in database
 func (r action) Persist(i *models.ActionInput) (*models.Action, error) {
 	a := i.ToEntity()
 
@@ -34,7 +36,8 @@ func (r action) Persist(i *models.ActionInput) (*models.Action, error) {
 	return a, err
 }
 
-func (_ action) FindOne(id uint) (*models.Action, error) {
+// FindOne action by id
+func (r action) FindOne(id uint) (*models.Action, error) {
 	a := &models.Action{}
 
 	err := db.Where("id = ?", id).First(a).Error
@@ -42,7 +45,8 @@ func (_ action) FindOne(id uint) (*models.Action, error) {
 	return a, err
 }
 
-func (_ action) FindByUUID(uuid string) (*models.Action, error) {
+// FindByUUID action
+func (r action) FindByUUID(uuid string) (*models.Action, error) {
 	e := &models.Action{}
 
 	err := db.Where("uuid = ?", uuid).First(e).Error

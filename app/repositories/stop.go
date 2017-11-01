@@ -7,13 +7,17 @@ import (
 
 type stop struct{}
 
+// Stop namespace
 var Stop stop
 
-func (_ stop) Persist(s *models.Stop) error {
+
+// Persist one stop
+func (r stop) Persist(s *models.Stop) error {
 	return db.Save(s).Error
 }
 
-func (_ stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collection, error) {
+// FindAllByStation stops
+func (r stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collection, error) {
 	stops := []*models.Stop{}
 
 	db := db.
@@ -28,7 +32,8 @@ func (_ stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collect
 	return NewCollection(f, db, &stops)
 }
 
-func (_ stop) FindAllByTrain(code string, f filters.Filter) (*models.Collection, error) {
+// FindAllByTrain stops
+func (r stop) FindAllByTrain(code string, f filters.Filter) (*models.Collection, error) {
 	stops := []*models.Stop{}
 
 	db := db.
@@ -43,7 +48,8 @@ func (_ stop) FindAllByTrain(code string, f filters.Filter) (*models.Collection,
 	return NewCollection(f, db, &stops)
 }
 
-func (_ stop) FindOneByStationAndCode(stationID int, code string) (*models.Stop, error) {
+// FindOneByStationAndCode stop
+func (r stop) FindOneByStationAndCode(stationID int, code string) (*models.Stop, error) {
 	stop := &models.Stop{}
 
 	err := db.
@@ -56,7 +62,8 @@ func (_ stop) FindOneByStationAndCode(stationID int, code string) (*models.Stop,
 	return stop, err
 }
 
-func (_ stop) IsExist(stationID int, code string) (bool, error) {
+// IsExist return true if stop between stationID and code train exist
+func (r stop) IsExist(stationID int, code string) (bool, error) {
 	count := 0
 
 	err := db.Model(&models.Stop{}).

@@ -8,7 +8,7 @@ import (
 
 const tagUnique = "unique"
 
-func UniqueConstraint(f validator.FieldLevel) bool {
+func uniqueConstraint(f validator.FieldLevel) bool {
 	top := f.Top()
 
 	if !top.IsValid() {

@@ -2,6 +2,7 @@ package repositories
 
 import "fmt"
 
+// ValueExist return true if value 'v' exist in 's' table for field 'f'
 func ValueExist(s interface{}, f string, v string) (bool, error) {
 	count := 0
 
@@ -14,7 +15,8 @@ func ValueExist(s interface{}, f string, v string) (bool, error) {
 	return count > 0, nil
 }
 
-func IdExist(table string, id uint64) (bool, error) {
+// IDExist return true if ID exist in table
+func IDExist(table string, id uint64) (bool, error) {
 	count := 0
 
 	err := db.Table(table).Where("id = ?", id).Count(&count).Error

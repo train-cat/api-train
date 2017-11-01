@@ -5,18 +5,22 @@ import (
 	"github.com/train-cat/api-train/app/rest"
 )
 
+// List of actions available
 const (
 	ActionTypeMessenger = "messenger"
 )
 
+// AllActionTypes regroup all types available, used for validation
 var AllActionTypes = []string{ActionTypeMessenger}
 
 type (
+	// ActionData send by client
 	ActionData struct {
 		Type   *string `gorm:"column:type"    json:"type" validate:"required,action_type"`
-		Data   *Json   `gorm:"column:data"    json:"data" validate:"required"`
+		Data   *JSON   `gorm:"column:data"    json:"data" validate:"required"`
 	}
 
+	// Action to perform when alert is triggered
 	Action struct {
 		Entity
 		ActionData
@@ -25,9 +29,11 @@ type (
 		rest.Hateoas
 	}
 
+	// ActionInput send by client
 	ActionInput ActionData
 )
 
+// ToEntity transform ActionInput to Action
 func (i *ActionInput) ToEntity() *Action {
 	e := &Action{ActionData: ActionData(*i)}
 
@@ -36,10 +42,12 @@ func (i *ActionInput) ToEntity() *Action {
 	return e
 }
 
+// TableName for ActionInput, used by unique validation on ActionInput
 func (i *ActionInput) TableName() string {
 	return "action"
 }
 
+// SetUUID for ensure only one action is set per type and user
 func (a *Action) SetUUID() string {
 	switch *a.Type {
 	case ActionTypeMessenger:
@@ -49,6 +57,7 @@ func (a *Action) SetUUID() string {
 	return a.UUID
 }
 
+// GenerateHateoas content
 func (a *Action) GenerateHateoas(ctx *aah.Context) error {
 	a.Hateoas = rest.Hateoas{
 		Embedded: rest.Embedded{},

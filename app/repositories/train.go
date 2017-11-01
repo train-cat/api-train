@@ -8,9 +8,12 @@ import (
 
 type train struct{}
 
+// Train namespace
 var Train train
 
-func (_ train) Persist(i *models.TrainInput) (*models.Train, error) {
+
+// Persist train in database
+func (r train) Persist(i *models.TrainInput) (*models.Train, error) {
 	t := i.ToEntity()
 
 	err := db.Save(t).Error
@@ -22,7 +25,8 @@ func (_ train) Persist(i *models.TrainInput) (*models.Train, error) {
 	return t, err
 }
 
-func (_ train) FindOneByCode(code string) (*models.Train, error) {
+// FindOneByCode train
+func (r train) FindOneByCode(code string) (*models.Train, error) {
 	train := &models.Train{}
 
 	err := db.
@@ -36,7 +40,8 @@ func (_ train) FindOneByCode(code string) (*models.Train, error) {
 	return train, nil
 }
 
-func (_ train) IsExist(code string) bool {
+// IsExist return true if code train already exist
+func (r train) IsExist(code string) bool {
 	exist, err := ValueExist(&models.Train{}, "code", code)
 
 	if err != nil {

@@ -8,12 +8,13 @@ import (
 )
 
 type (
-	// TODO validation
+	// StopData they can be received by client
 	StopData struct {
 		Time   *Schedule `gorm:"column:schedule" json:"schedule" validate:"required"`
 		IsWeek *bool     `gorm:"column:is_week"  json:"is_week"`
 	}
 
+	// Stop represent one train stop at one station in given time
 	Stop struct {
 		Entity
 		StopData
@@ -24,6 +25,7 @@ type (
 		rest.Hateoas
 	}
 
+	// StopOutput is json send by the API
 	StopOutput struct {
 		ID       uint   `json:"id"`
 		Schedule string `json:"schedule"`
@@ -31,13 +33,16 @@ type (
 		rest.Hateoas
 	}
 
+	// StopInput by the client
 	StopInput StopData
 )
 
+// ToEntity transform StopInput to Stop
 func (i *StopInput) ToEntity() *Stop {
 	return &Stop{StopData: StopData(*i)}
 }
 
+// GenerateHateoas content
 func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 	if s.Train.Terminus != nil {
 		err := s.Train.Terminus.GenerateHateoas(ctx)
@@ -75,6 +80,7 @@ func (s *Stop) GenerateHateoas(ctx *aah.Context) error {
 	return nil
 }
 
+// MarshalJSON Stop to StopOutput
 func (s Stop) MarshalJSON() ([]byte, error) {
 	return json.Marshal(StopOutput{
 		ID:       s.ID,

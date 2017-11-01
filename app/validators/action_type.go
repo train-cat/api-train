@@ -7,7 +7,7 @@ import (
 
 const tagActionType = "action_type"
 
-func ActionTypeConstraint(f validator.FieldLevel) bool {
+func actionTypeConstraint(f validator.FieldLevel) bool {
 	typ := f.Field().String()
 
 	for _, t := range models.AllActionTypes {

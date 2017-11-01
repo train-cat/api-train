@@ -9,6 +9,7 @@ import (
 	"github.com/train-cat/api-train/app/rest"
 )
 
+// NewCollection create collection for 'v' and apply filter
 func NewCollection(f filters.Filter, db *gorm.DB, v interface{}) (*models.Collection, error) {
 	db = f.ApplyFilter(db)
 

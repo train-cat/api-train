@@ -6,22 +6,26 @@ import (
 	"github.com/train-cat/api-train/app/repositories"
 )
 
+// StopController regroup all endpoints concern stop
 type StopController struct {
 	Controller
 }
 
+// CGetByStation return all stops for one given station
 func (c *StopController) CGetByStation(stationID int, f *filters.Stop) {
 	ss, err := repositories.Stop.FindAllByStation(stationID, f)
 
 	c.get(ss, err)
 }
 
+// CGetByTrain return all stops for one given train
 func (c *StopController) CGetByTrain(code string, f *filters.Pagination) {
 	ss, err := repositories.Stop.FindAllByTrain(code, f)
 
 	c.get(ss, err)
 }
 
+// Head allow to know is specific station is deserve by a train
 func (c *StopController) Head(stationID int, code string) {
 	exist, err := repositories.Stop.IsExist(stationID, code)
 
@@ -37,10 +41,12 @@ func (c *StopController) Head(stationID int, code string) {
 	c.Reply().NoContent()
 }
 
+// BeforeLink verify is user is allowed to link station with a train
 func (c *StopController) BeforeLink() {
 	c.needRole("admin")
 }
 
+// Link allow to create new stop between one station and one train
 func (c *StopController) Link(stationID uint, code string, i *models.StopInput) {
 	s, sErr := repositories.Station.FindOne(stationID)
 	t, tErr := repositories.Train.FindOneByCode(code)
