@@ -54,6 +54,7 @@ func InitDatabase(_ *aah.Event) {
 	}
 
 	db.SingularTable(true)
+	db = db.Set("gorm:save_associations", false)
 }
 
 func exitOnError(key string, ok bool) {

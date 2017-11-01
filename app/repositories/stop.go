@@ -13,6 +13,9 @@ var Stop stop
 
 // Persist one stop
 func (r stop) Persist(s *models.Stop) error {
+	s.StationID = s.Station.ID
+	s.TrainID = s.Train.ID
+
 	return db.Save(s).Error
 }
 
