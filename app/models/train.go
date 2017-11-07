@@ -8,7 +8,7 @@ import (
 type (
 	// TrainData they can be received by client
 	TrainData struct {
-		Code       *string `gorm:"column:code"        json:"code"        validate:"required,len=6,unique=code"`
+		Code       *string `gorm:"column:code"        json:"code"        validate:"required,max=6,unique=code"`
 		Mission    *string `gorm:"column:mission"     json:"mission"     validate:"required,len=4"`
 		TerminusID *uint   `gorm:"column:terminus_id" json:"terminus_id" validate:"omitempty,foreign_key=station"`
 	}
