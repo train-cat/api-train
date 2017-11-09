@@ -1,6 +1,9 @@
 package repositories
 
-import "github.com/train-cat/api-train/app/models"
+import (
+	"github.com/train-cat/api-train/app/models"
+	"github.com/train-cat/api-train/app/filters"
+)
 
 type alert struct{}
 
@@ -24,4 +27,15 @@ func (r alert) Persist(s *models.Stop, i *models.AlertInput) (*models.Alert, err
 	err = db.Save(a).Error
 
 	return a, err
+}
+
+// FindAll alerts filtered
+func (r alert) FindAll(f filters.Filter) (*models.Collection, error) {
+	alerts := []*models.Alert{}
+
+	db := db.Model(models.Alert{}).
+		Preload("Station").
+		Preload("Action")
+
+	return NewCollection(f, db, &alerts)
 }

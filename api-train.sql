@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -42,6 +44,7 @@ CREATE TABLE `alert` (
   KEY `idx_alert_deleted_at` (`deleted_at`),
   KEY `idx_alert_station` (`station_id`),
   KEY `idx_alert_action` (`action_id`),
+  KEY `idx_alert_code` (`code_train`),
   CONSTRAINT `fk_alert_action` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_alert_station` FOREIGN KEY (`id`) REFERENCES `station` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
