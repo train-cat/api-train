@@ -14,7 +14,7 @@ tags:
 schemes:
   - https
 paths:
-  '/stations':
+  /stations:
     get:
       tags:
         - station
@@ -46,7 +46,7 @@ paths:
           required: false
         - in: query
           type: string
-          name: 'name'
+          name: name
           description: Search by name
           required: false
       responses:
@@ -164,22 +164,22 @@ paths:
           required: false
         - in: query
           type: string
-          name: 'terminus_id'
+          name: terminus_id
           description: Search by terminus ID
           required: false
         - in: query
           type: string
-          name: 'terminus_name'
+          name: terminus_name
           description: Search by terminus name
           required: false
         - in: query
           type: string
-          name: 'mission'
+          name: mission
           description: Search by mission
           required: false
         - in: query
           type: string
-          name: 'train_through_station_id'
+          name: train_through_station_id
           description: Search by train through a specific station ID
           required: false
       responses:
@@ -338,7 +338,7 @@ paths:
           description: You should be authentified
         '403':
           description: You have not the permission
-  '/trains':
+  /trains:
     post:
       tags:
         - train
@@ -402,7 +402,7 @@ paths:
           description: resource not found
           schema:
             $ref: '#/definitions/Error'
-  '/users':
+  /users:
     post:
       tags:
         - user
@@ -429,7 +429,7 @@ paths:
             $ref: '#/definitions/User'
         '400':
           description: Something is wrong with the value
-  '/login':
+  /login:
     post:
       tags:
         - user
@@ -456,7 +456,7 @@ paths:
             $ref: '#/definitions/Token'
         '400':
           description: Bad Credentials
-  '/actions':
+  /actions:
     post:
       tags:
         - action
@@ -492,7 +492,59 @@ paths:
           description: You should be authentified
         '403':
           description: You have not the permission
-
+  /alerts:
+    get:
+      tags:
+        - alert
+      summary: List all alerts
+      operationId: cget_alerts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+        - in: query
+          type: integer
+          name: _page
+          description: Current page
+          default: 1
+          required: false
+        - in: query
+          type: integer
+          name: _max_per_page
+          description: Max result per page
+          default: 20
+          minimum: 1
+          maximum: 100
+          required: false
+        - in: query
+          type: string
+          name: code_train
+          description: Search by code train
+          required: false
+        - in: query
+          type: string
+          name: station_id
+          description: Search by station id
+          required: false
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Collection'
+        '400':
+          description: Something is wrong with the filters
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Page not found
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   Collection:
     type: object
@@ -517,7 +569,6 @@ definitions:
             items:
               type: object
               description: Collection of entity
-
   Link:
     type: object
     properties:
@@ -538,7 +589,6 @@ definitions:
             $ref: '#/definitions/Link'
           stop:
             $ref: '#/definitions/Link'
-
   StationInput:
     type: object
     properties:
@@ -555,7 +605,6 @@ definitions:
       is_realtime:
         description: If the station is available for realtime API
         type: boolean
-
   Train:
     type: object
     properties:
@@ -578,7 +627,6 @@ definitions:
         properties:
           terminus:
             $ref: '#/definitions/Station'
-
   TrainInput:
     type: object
     properties:
@@ -595,7 +643,6 @@ definitions:
       terminus_id:
         type: integer
         description: Station ID of the terminus
-
   Stop:
     type: object
     properties:
@@ -614,17 +661,15 @@ definitions:
             type: string
           terminus:
             $ref: '#/definitions/Station'
-
   StopInput:
     type: object
     properties:
       schedule:
         type: string
-        pattern: "[09]{1,2}:[09]{1,2}"
+        pattern: '[09]{1,2}:[09]{1,2}'
       is_week:
         type: boolean
         default: false
-
   User:
     type: object
     properties:
@@ -638,7 +683,6 @@ definitions:
         type: array
         items:
           type: string
-
   UserInput:
     type: object
     properties:
@@ -653,7 +697,6 @@ definitions:
         type: string
         minLength: 6
         maxLength: 255
-
   UserToken:
     type: object
     properties:
@@ -661,13 +704,11 @@ definitions:
         type: string
       password:
         type: string
-
   Token:
     type: object
     properties:
       token:
         type: string
-
   Action:
     type: object
     properties:
@@ -675,7 +716,7 @@ definitions:
         type: integer
       type:
         type: string
-        pattern: 'messenger'
+        pattern: messenger
       data:
         type: object
       _links:
@@ -683,16 +724,14 @@ definitions:
         properties:
           self:
             $ref: '#/definitions/Link'
-
   ActionInput:
     type: object
     properties:
       type:
         type: string
-        pattern: 'messenger'
+        pattern: messenger
       data:
         type: object
-
   Alert:
     type: object
     properties:
@@ -714,13 +753,11 @@ definitions:
             $ref: '#/definitions/Link'
           train:
             $ref: '#/definitions/Link'
-
   AlertInput:
     type: object
     properties:
       action_id:
         type: integer
-
   Error:
     type: object
     properties:
