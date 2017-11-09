@@ -28,16 +28,18 @@ func NewCollection(f filters.Filter, db *gorm.DB, v interface{}) (*models.Collec
 		return nil, err
 	}
 
-	pages := int(math.Ceil(float64(count) / float64(f.GetLimit())))
+	countPages := int(math.Ceil(float64(count) / float64(f.GetLimit())))
+	currentPage := f.GetPage()
 
-	if pages < f.GetPage() {
+	// page doesn't exist (except page 1)
+	if countPages < currentPage && currentPage != 1 {
 		return nil, nil
 	}
 
 	return &models.Collection{
-		Page:  f.GetPage(),
+		Page:  currentPage,
 		Limit: f.GetLimit(),
-		Pages: pages,
+		Pages: countPages,
 		Total: count,
 		Hateoas: rest.Hateoas{
 			Embedded: rest.Embedded{
