@@ -21,7 +21,13 @@ func (c *StopController) CGetByStation(stationID int, f *filters.Stop) {
 
 // CGetByTrain return all stops for one given train
 func (c *StopController) CGetByTrain(code string, f *filters.Pagination) {
-	ss, err := repositories.Stop.FindAllByTrain(code, f)
+	t, err := repositories.Train.FindOneByCode(code)
+
+	if c.serverError(err) || c.notFound(t) {
+		return
+	}
+
+	ss, err := repositories.Stop.FindAllByTrain(t, f)
 
 	c.get(ss, err)
 }
