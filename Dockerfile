@@ -1,4 +1,4 @@
-FROM eraac/golang:debug
+FROM eraac/golang
 
 ADD api-train /api-train
 
