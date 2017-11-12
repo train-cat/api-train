@@ -1,6 +1,6 @@
 FROM eraac/golang:debug
 
-COPY api-train/ /api-train
+ADD api-train /api-train
 
 WORKDIR /api-train
 
