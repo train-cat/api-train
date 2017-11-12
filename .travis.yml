@@ -11,7 +11,7 @@ before_script:
   - go get -u aahframework.org/tools.v0/aah
 
 script:
-  - GOOS=linux GOARCH=amd64 AAH_ENV=prod aah build -e=prod -o build/api-train.zip
+  - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 AAH_ENV=prod aah build -e=prod -o build/api-train.zip
   - unzip build/api-train.zip
 
 after_success:
