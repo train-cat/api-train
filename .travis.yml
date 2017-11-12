@@ -1,0 +1,22 @@
+sudo: required
+
+language: go
+go:
+  - 1.9
+
+services:
+  - docker
+
+before_script:
+  - go get -u aahframework.org/tools.v0/aah
+
+script:
+  - GOOS=linux GOARCH=amd64 AAH_ENV=prod aah build -e=prod -o build/api-train.zip
+
+after_success:
+  - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+  - export REPO=$DOCKER_USER/api-stats
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$TAG .
+  - docker push $REPO
+
