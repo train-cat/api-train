@@ -12,6 +12,7 @@ before_script:
 
 script:
   - GOOS=linux GOARCH=amd64 AAH_ENV=prod aah build -e=prod -o build/api-train.zip
+  - unzip build/api-train.zip
 
 after_success:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
