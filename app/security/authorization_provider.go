@@ -10,7 +10,7 @@ import (
 var _ authz.Authorizer = (*AuthorizationProvider)(nil)
 
 // AuthorizationProvider struct implements `authz.Authorizer` interface.
-type AuthorizationProvider struct {}
+type AuthorizationProvider struct{}
 
 // Init method initializes the AuthorizationProvider, this method gets called
 // during server start up.

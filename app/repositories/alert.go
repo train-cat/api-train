@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"github.com/train-cat/api-train/app/models"
 	"github.com/train-cat/api-train/app/filters"
+	"github.com/train-cat/api-train/app/models"
 )
 
 type alert struct{}

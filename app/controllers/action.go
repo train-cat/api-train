@@ -10,7 +10,6 @@ type ActionController struct {
 	Controller
 }
 
-
 // BeforePost verify if the user is allowed to create an action
 func (c *ActionController) BeforePost() {
 	c.needRole("bot")

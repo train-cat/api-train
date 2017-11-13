@@ -44,7 +44,7 @@ func (a *Alert) GenerateHateoas(ctx *aah.Context) error {
 	a.Hateoas = rest.Hateoas{
 		Embedded: rest.Embedded{
 			"station": a.Station,
-			"action": a.Action,
+			"action":  a.Action,
 		},
 		Links: rest.Links{
 			"self": rest.Link{

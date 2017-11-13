@@ -2,6 +2,7 @@ package filters
 
 import "github.com/jinzhu/gorm"
 
+// Alert filter
 type Alert struct {
 	Pagination
 	Code      string `bind:"code_train"`

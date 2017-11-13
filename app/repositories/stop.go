@@ -10,7 +10,6 @@ type stop struct{}
 // Stop namespace
 var Stop stop
 
-
 // Persist one stop
 func (r stop) Persist(s *models.Stop) error {
 	s.StationID = s.Station.ID
@@ -24,7 +23,7 @@ func (r stop) FindAllByStation(stationID int, f filters.Filter) (*models.Collect
 	stops := []*models.Stop{}
 
 	db := db.
-	Model(models.Stop{}).
+		Model(models.Stop{}).
 		Preload("Train").
 		Preload("Train.Terminus").
 		Joins("LEFT JOIN train ON train_id = train.id").
@@ -40,7 +39,7 @@ func (r stop) FindAllByTrain(t *models.Train, f filters.Filter) (*models.Collect
 	stops := []*models.Stop{}
 
 	db := db.
-	Model(models.Stop{}).
+		Model(models.Stop{}).
 		Preload("Station").
 		Preload("Train").
 		Preload("Train.Terminus").

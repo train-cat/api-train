@@ -5,11 +5,11 @@ import (
 
 	"aahframework.org/aah.v0"
 	"aahframework.org/essentials.v0"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/train-cat/api-train/app/models"
 	"github.com/train-cat/api-train/app/repositories"
 	"github.com/train-cat/api-train/app/security"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // UserController regroup all endpoints concern the user

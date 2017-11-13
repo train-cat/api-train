@@ -2,15 +2,14 @@ package repositories
 
 import (
 	"aahframework.org/log.v0"
-	"github.com/train-cat/api-train/app/models"
 	"github.com/jinzhu/gorm"
+	"github.com/train-cat/api-train/app/models"
 )
 
 type train struct{}
 
 // Train namespace
 var Train train
-
 
 // Persist train in database
 func (r train) Persist(i *models.TrainInput) (*models.Train, error) {
@@ -30,7 +29,7 @@ func (r train) FindOneByCode(code string) (*models.Train, error) {
 	train := &models.Train{}
 
 	err := db.
-	Preload("Terminus").
+		Preload("Terminus").
 		Where("code = ?", code).First(train).Error
 
 	if err == gorm.ErrRecordNotFound {

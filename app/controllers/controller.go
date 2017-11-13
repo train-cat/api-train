@@ -6,16 +6,15 @@ import (
 	"strings"
 
 	"aahframework.org/aah.v0"
-	"gopkg.in/go-playground/validator.v9"
 	"github.com/train-cat/api-train/app/rest"
 	"github.com/train-cat/api-train/app/validators"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // Controller extend aah.Context
 type Controller struct {
 	*aah.Context
 }
-
 
 func (c *Controller) serverError(err error) bool {
 	if err == nil {
@@ -67,7 +66,6 @@ func (c *Controller) needRole(role string) {
 	}
 }
 
-
 func (c *Controller) notFound(s interface{}) bool {
 	if !reflect.ValueOf(s).IsNil() {
 		return false
@@ -93,7 +91,7 @@ func (c *Controller) forbiddenResponse() {
 
 func (c *Controller) notFoundResponse() {
 	c.Reply().NotFound().JSON(aah.Error{
-		Code: http.StatusNotFound,
+		Code:    http.StatusNotFound,
 		Message: "Not Found",
 	})
 }
@@ -109,6 +107,7 @@ func (c *Controller) badRequestResponse(errs error) {
 
 	c.Reply().BadRequest().JSON(m)
 }
+
 // === end shortcut response ===
 
 func (c *Controller) hateoas(s rest.Hateoasable) error {

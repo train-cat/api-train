@@ -26,10 +26,10 @@ type (
 		Links    Links    `json:"_links,omitempty"    gorm:"-"`
 	}
 
-	// Embedded struct in hateoas reponse
+	// Embedded struct in hateoas response
 	Embedded map[string]interface{}
 	// Links to another resources
-	Links    map[string]Link
+	Links map[string]Link
 
 	// Link to another resource
 	Link struct {

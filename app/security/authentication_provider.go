@@ -13,7 +13,7 @@ import (
 var _ authc.Authenticator = (*AuthenticationProvider)(nil)
 
 // AuthenticationProvider struct implements `authc.Authenticator` interface.
-type AuthenticationProvider struct {}
+type AuthenticationProvider struct{}
 
 //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 // AuthenticationProvider methods

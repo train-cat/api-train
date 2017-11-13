@@ -1,8 +1,8 @@
 package validators
 
 import (
-	"gopkg.in/go-playground/validator.v9"
 	"github.com/train-cat/api-train/app/models"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 const tagActionType = "action_type"

@@ -16,8 +16,8 @@ var AllActionTypes = []string{ActionTypeMessenger}
 type (
 	// ActionData send by client
 	ActionData struct {
-		Type   *string `gorm:"column:type"    json:"type" validate:"required,action_type"`
-		Data   *JSON   `gorm:"column:data"    json:"data" validate:"required"`
+		Type *string `gorm:"column:type"    json:"type" validate:"required,action_type"`
+		Data *JSON   `gorm:"column:data"    json:"data" validate:"required"`
 	}
 
 	// Action to perform when alert is triggered

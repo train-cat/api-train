@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"aahframework.org/aah.v0"
 	"github.com/train-cat/api-train/app/filters"
 	"github.com/train-cat/api-train/app/models"
 	"github.com/train-cat/api-train/app/repositories"
-	"aahframework.org/aah.v0"
 )
 
 // StopController regroup all endpoints concern stop

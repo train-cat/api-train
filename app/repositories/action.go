@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"github.com/train-cat/api-train/app/models"
 	"github.com/jinzhu/gorm"
+	"github.com/train-cat/api-train/app/models"
 )
 
 type action struct{}
