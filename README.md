@@ -2,6 +2,8 @@
 
 API to manage alerts on train problems, list stations and stops
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/train-cat/api-train)](https://goreportcard.com/report/github.com/train-cat/api-train)
+
 ## Documentation
 
 You can look swagger file and the postman collection
