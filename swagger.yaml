@@ -182,6 +182,21 @@ paths:
           name: train_through_station_id
           description: Search by train through a specific station ID
           required: false
+        - in: query
+          type: string
+          name: scheduled_before
+          description: Search by schedule
+          required: false
+        - in: query
+          type: string
+          name: scheduled_after
+          description: Search by schedule
+          required: false
+        - in: query
+          type: string
+          name: scheduled_at
+          description: Search by schedule
+          required: false
       responses:
         '200':
           description: successful operation
