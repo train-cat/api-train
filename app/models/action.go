@@ -7,11 +7,12 @@ import (
 
 // List of actions available
 const (
+	ActionTypeTelegram  = "telegram"
 	ActionTypeMessenger = "messenger"
 )
 
 // AllActionTypes regroup all types available, used for validation
-var AllActionTypes = []string{ActionTypeMessenger}
+var AllActionTypes = []string{ActionTypeTelegram, ActionTypeMessenger}
 
 type (
 	// ActionData send by client

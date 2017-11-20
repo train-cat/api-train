@@ -716,7 +716,7 @@ definitions:
         type: integer
       type:
         type: string
-        pattern: messenger
+        pattern: (messenger|telegram)
       data:
         type: object
       _links:
@@ -729,7 +729,7 @@ definitions:
     properties:
       type:
         type: string
-        pattern: messenger
+        pattern: (messenger|telegram)
       data:
         type: object
   Alert:
