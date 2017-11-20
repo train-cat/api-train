@@ -13,6 +13,9 @@ type Stop struct {
 	TerminusName          string `bind:"terminus_name"`
 	TrainThroughStationID uint   `bind:"train_through_station_id"`
 	Mission               string `bind:"mission"`
+	ScheduledBefore       string `bind:"scheduled_before"`
+	ScheduledAfter        string `bind:"scheduled_after"`
+	ScheduledAt           string `bind:"scheduled_at"`
 }
 
 // ApplyFilter on query
@@ -33,6 +36,18 @@ func (f *Stop) ApplyFilter(db *gorm.DB) *gorm.DB {
 		db = db.
 			Joins("LEFT JOIN stop AS stop_at ON train.id = stop_at.train_id").
 			Where("(stop_at.station_id = ? OR terminus_id = ?)", f.TrainThroughStationID, f.TrainThroughStationID)
+	}
+
+	if f.ScheduledBefore != "" {
+		db = db.Where("schedule < ?", f.ScheduledBefore)
+	}
+
+	if f.ScheduledAfter != "" {
+		db = db.Where("schedule > ?", f.ScheduledAfter)
+	}
+
+	if f.ScheduledAt != "" {
+		db = db.Where("schedule = ?", f.ScheduledAt)
 	}
 
 	return db
