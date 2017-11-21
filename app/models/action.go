@@ -51,6 +51,8 @@ func (i *ActionInput) TableName() string {
 // SetUUID for ensure only one action is set per type and user
 func (a *Action) SetUUID() string {
 	switch *a.Type {
+	case ActionTypeTelegram:
+		a.UUID = a.Data.Get("user_id", "")
 	case ActionTypeMessenger:
 		a.UUID = a.Data.Get("messenger_id", "")
 	}
