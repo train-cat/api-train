@@ -17,7 +17,7 @@ CREATE TABLE `action` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  `type` enum('unknown','messenger') NOT NULL DEFAULT 'unknown',
+  `type` enum('unknown','messenger','telegram') NOT NULL DEFAULT 'unknown',
   `data` text,
   `uuid` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
