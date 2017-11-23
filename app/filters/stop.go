@@ -35,19 +35,19 @@ func (f *Stop) ApplyFilter(db *gorm.DB) *gorm.DB {
 	if f.TrainThroughStationID != 0 {
 		db = db.
 			Joins("LEFT JOIN stop AS stop_at ON train.id = stop_at.train_id").
-			Where("(stop_at.station_id = ? OR terminus_id = ?)", f.TrainThroughStationID, f.TrainThroughStationID)
+			Where("stop_at.station_id = ? OR (terminus_id = ? AND stop.id = stop_at.id)", f.TrainThroughStationID, f.TrainThroughStationID)
 	}
 
 	if f.ScheduledBefore != "" {
-		db = db.Where("schedule < ?", f.ScheduledBefore)
+		db = db.Where("stop.schedule < ?", f.ScheduledBefore)
 	}
 
 	if f.ScheduledAfter != "" {
-		db = db.Where("schedule > ?", f.ScheduledAfter)
+		db = db.Where("stop.schedule > ?", f.ScheduledAfter)
 	}
 
 	if f.ScheduledAt != "" {
-		db = db.Where("schedule = ?", f.ScheduledAt)
+		db = db.Where("stop.schedule = ?", f.ScheduledAt)
 	}
 
 	return db
