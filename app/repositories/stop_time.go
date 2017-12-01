@@ -36,6 +36,8 @@ func (r stopTime) Find(id int) (*models.StopTime, error) {
 	stop := &models.StopTime{}
 
 	err := db.
+		Preload("Trip").
+		Preload("Station").
 		Where("id = ?", id).First(stop).Error
 
 	if err == gorm.ErrRecordNotFound {
