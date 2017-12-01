@@ -1,13 +1,13 @@
 swagger: '2.0'
 info:
   description: Documentation for `api.train.cat`
-  version: 1.0.0
+  version: 2.0.0
   title: API train-cat
 host: api.train.cat
 tags:
   - name: station
-  - name: stop
-  - name: train
+  - name: stop_time
+  - name: trip
   - name: user
   - name: action
   - name: alert
@@ -62,41 +62,6 @@ paths:
           description: Page not found
           schema:
             $ref: '#/definitions/Error'
-    post:
-      tags:
-        - station
-      summary: Create new station
-      operationId: post_station
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          description: Format response (only application/json is accepted)
-          type: string
-          name: Accept
-          default: application/json
-        - in: header
-          description: Authentification token
-          type: string
-          name: Authorization
-          default: Bearer <token>
-        - in: body
-          name: station
-          schema:
-            $ref: '#/definitions/StationInput'
-      responses:
-        '201':
-          description: Created
-          schema:
-            $ref: '#/definitions/Station'
-        '400':
-          description: Something is wrong with the value
-        '401':
-          description: You should be authentified
-        '403':
-          description: You have not the permission
   '/stations/{station_id}':
     get:
       tags:
@@ -127,12 +92,12 @@ paths:
           description: Resource Not Found
           schema:
             $ref: '#/definitions/Error'
-  '/stations/{station_id}/stops':
+  '/stations/{station_id}/stops_time':
     get:
       tags:
-        - stop
-      summary: List all stops for one station
-      operationId: cget_station_stops
+        - stop_time
+      summary: List all stops time for one station
+      operationId: cget_station_stops_time
       consumes:
         - application/json
       produces:
@@ -161,16 +126,6 @@ paths:
           default: 20
           minimum: 1
           maximum: 100
-          required: false
-        - in: query
-          type: string
-          name: terminus_id
-          description: Search by terminus ID
-          required: false
-        - in: query
-          type: string
-          name: terminus_name
-          description: Search by terminus name
           required: false
         - in: query
           type: string
@@ -206,117 +161,11 @@ paths:
           description: something goes wrong with the filters
         '404':
           description: Station Not Found
-  '/trains/{code}/stops':
-    get:
-      tags:
-        - stop
-      summary: List all stops for one train
-      operationId: cget_train_stops
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          description: Format response (only application/json is accepted)
-          type: string
-          name: Accept
-          default: application/json
-        - in: path
-          type: string
-          name: code
-          description: Unique identifier of the train
-          required: true
-        - in: query
-          type: integer
-          name: _page
-          description: Current page
-          default: 1
-          required: false
-        - in: query
-          type: integer
-          name: _max_per_page
-          description: Max result per page
-          default: 20
-          minimum: 1
-          maximum: 100
-          required: false
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Collection'
-        '400':
-          description: something goes wrong with the filters
-        '404':
-          description: Train Not Found
-  '/stations/{station_id}/trains/{code}/stops':
-    post:
-      tags:
-        - stop
-      summary: Add train stop to a station
-      operationId: link_station_train
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          type: integer
-          name: station_id
-          description: Unique identifier of the train
-          required: true
-        - in: path
-          type: string
-          name: code
-          description: Unique identifier of the train
-          required: true
-        - in: body
-          name: stop
-          schema:
-            $ref: '#/definitions/StopInput'
-      responses:
-        '201':
-          description: Created
-          schema:
-            $ref: '#/definitions/Stop'
-        '400':
-          description: Something is wrong with the value
-        '401':
-          description: You should be authentified
-        '403':
-          description: You have not the permission
-    head:
-      tags:
-        - stop
-      summary: To know if a train stop at the station
-      operationId: head_station_train
-      parameters:
-        - in: header
-          description: Format response (only application/json is accepted)
-          type: string
-          name: Accept
-          default: application/json
-        - in: path
-          type: integer
-          name: station_id
-          description: Unique identifier of the train
-          required: true
-        - in: path
-          type: string
-          name: code
-          description: Unique identifier of the train
-          required: true
-      responses:
-        '204':
-          description: Train stop at this station
-        '404':
-          description: Train don't stop at this station
-  '/stations/{station_id}/trains/{code}/alerts':
+  '/stations/{station_id}/stops_time/{stop_time_id}/alerts':
     post:
       tags:
         - alert
-      summary: Create new alert for one stop
+      summary: Create new alert for one stop time
       operationId: post_alert
       consumes:
         - application/json
@@ -331,12 +180,12 @@ paths:
         - in: path
           type: integer
           name: station_id
-          description: Unique identifier of the train
+          description: Unique identifier of the station
           required: true
         - in: path
-          type: string
-          name: code
-          description: Unique identifier of the train
+          type: integer
+          name: stop_time_id
+          description: ID of the stop_time
           required: true
         - in: body
           name: stop
@@ -353,55 +202,19 @@ paths:
           description: You should be authentified
         '403':
           description: You have not the permission
-  /trains:
-    post:
-      tags:
-        - train
-      summary: Create new train
-      operationId: post_train
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          description: Format response (only application/json is accepted)
-          type: string
-          name: Accept
-          default: application/json
-        - in: header
-          description: Authentification token
-          type: string
-          name: Authorization
-          default: Bearer <token>
-        - in: body
-          name: train
-          schema:
-            $ref: '#/definitions/TrainInput'
-      responses:
-        '201':
-          description: Created
-          schema:
-            $ref: '#/definitions/Train'
-        '400':
-          description: Something is wrong with the value
-        '401':
-          description: You should be authentified
-        '403':
-          description: You have not the permission
-  '/trains/{code}':
+  '/trips/{trip_id}':
     get:
       tags:
-        - train
-      summary: Retrieve a train
-      operationId: get_train
+        - trip
+      summary: Retrieve a trip
+      operationId: get_trip
       produces:
         - application/json
       parameters:
         - in: path
           type: integer
-          name: code
-          description: Unique code of the train
+          name: trip_id
+          description: Unique id of the trip
           required: true
         - in: header
           description: Format response (only application/json is accepted)
@@ -412,7 +225,7 @@ paths:
         '200':
           description: Successful
           schema:
-            $ref: '#/definitions/Train'
+            $ref: '#/definitions/Trip'
         '404':
           description: resource not found
           schema:
@@ -620,12 +433,12 @@ definitions:
       is_realtime:
         description: If the station is available for realtime API
         type: boolean
-  Train:
+  Trip:
     type: object
     properties:
       id:
         type: integer
-        description: ID of the train
+        description: ID of the trip
       code:
         type: string
         description: Unique code of the train
@@ -642,23 +455,7 @@ definitions:
         properties:
           terminus:
             $ref: '#/definitions/Station'
-  TrainInput:
-    type: object
-    properties:
-      code:
-        type: string
-        description: Unique identifier for one train
-        minLength: 6
-        maxLength: 6
-      mission:
-        type: string
-        description: Mission of the train
-        minLength: 4
-        maxLength: 4
-      terminus_id:
-        type: integer
-        description: Station ID of the terminus
-  Stop:
+  StopTime:
     type: object
     properties:
       id:
@@ -666,25 +463,13 @@ definitions:
       schedule:
         type: string
         description: 'hh:mm of the stop'
-      on_week:
-        type: boolean
-        description: True if train is on week
       _embedded:
         type: object
         properties:
           mission:
             type: string
-          terminus:
-            $ref: '#/definitions/Station'
-  StopInput:
-    type: object
-    properties:
-      schedule:
-        type: string
-        pattern: '[09]{1,2}:[09]{1,2}'
-      is_week:
-        type: boolean
-        default: false
+          days:
+            type: number
   User:
     type: object
     properties:
