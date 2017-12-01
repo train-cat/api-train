@@ -51,27 +51,22 @@ CREATE TABLE `alert` (
 
 
 
-# Affichage de la table stop
+# Affichage de la table stop_time
 # ------------------------------------------------------------
 
-CREATE TABLE `stop` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `schedule` time DEFAULT NULL,
-  `is_week` tinyint(1) NOT NULL,
-  `station_id` int(11) unsigned NOT NULL,
-  `train_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_stop_id` (`id`),
-  UNIQUE KEY `uniq_stop_train_station` (`station_id`,`train_id`),
-  KEY `idx_stop_deleted_at` (`deleted_at`),
-  KEY `idx_stop_station_train` (`station_id`,`train_id`),
-  KEY `idx_stop_train` (`train_id`),
-  KEY `idx_stop_station` (`station_id`),
-  CONSTRAINT `fk_stop_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_stop_train` FOREIGN KEY (`train_id`) REFERENCES `train` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `stop_time` (
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`deleted_at` timestamp NULL DEFAULT NULL,
+	`schedule` time NOT NULL,
+	`station_id` int(11) unsigned NOT NULL,
+	`trip_id` int(11) unsigned NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `idx_station` (`station_id`),
+	KEY `idx_trip` (`trip_id`),
+	CONSTRAINT `fk_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `fk_trip` FOREIGN KEY (`trip_id`) REFERENCES `trip` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -515,24 +510,40 @@ VALUES
 UNLOCK TABLES;
 
 
-# Affichage de la table train
+
+# Affichage de la table calendar
 # ------------------------------------------------------------
 
-CREATE TABLE `train` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `code` varchar(255) NOT NULL,
-  `mission` varchar(255) NOT NULL,
-  `terminus_id` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_train_id` (`id`),
-  UNIQUE KEY `uniq_train_code` (`code`),
-  KEY `idx_train_code` (`code`),
-  KEY `idx_train_terminus` (`terminus_id`),
-  KEY `idx_train_deleted_at` (`deleted_at`),
-  CONSTRAINT `fk_train_terminus` FOREIGN KEY (`terminus_id`) REFERENCES `station` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+CREATE TABLE `calendar` (
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`deleted_at` timestamp NULL DEFAULT NULL,
+	`start` int(11) NOT NULL,
+	`end` int(11) NOT NULL,
+	`days` tinyint(3) unsigned NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `idx_start` (`start`),
+	KEY `idx_end` (`end`)
+) ENGINE=InnoDB AUTO_INCREMENT=1297 DEFAULT CHARSET=utf8mb4;
+
+
+
+# Affichage de la table trip
+# ------------------------------------------------------------
+
+CREATE TABLE `trip` (
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`deleted_at` timestamp NULL DEFAULT NULL,
+	`code` varchar(6) NOT NULL DEFAULT '',
+	`mission` varchar(6) NOT NULL DEFAULT '',
+	`calendar_id` int(11) unsigned NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `idx_code` (`code`),
+	KEY `fk_calendar` (`calendar_id`),
+	CONSTRAINT `fk_calendar` FOREIGN KEY (`calendar_id`) REFERENCES `calendar` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
