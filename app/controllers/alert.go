@@ -29,10 +29,10 @@ func (c *AlertController) BeforePost() {
 }
 
 // Post create a new alert
-func (c *AlertController) Post(stationID int, code string, i *models.AlertInput) {
+func (c *AlertController) Post(stationID int, stopTimeID int, i *models.AlertInput) {
 	// TODO add uniq constraint (stationID + code + i.actionID)
 
-	s, err := repositories.Stop.FindOneByStationAndCode(stationID, code)
+	s, err := repositories.StopTime.Find(stopTimeID)
 
 	if c.notFound(s) || c.serverError(err) || !c.validatePost(i) {
 		return

@@ -51,7 +51,7 @@ func (a *Alert) GenerateHateoas(ctx *aah.Context) error {
 			// TODO Href: rest.GenerateURI(ctx, "get_alert"),
 			},
 			"train": rest.Link{
-				Href: rest.GenerateURI(ctx, "get_train", a.CodeTrain),
+				Href: rest.GenerateURI(ctx, "get_trip", a.CodeTrain),
 			},
 		},
 	}

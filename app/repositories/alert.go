@@ -11,11 +11,11 @@ type alert struct{}
 var Alert alert
 
 // Persist on alert in database
-func (r alert) Persist(s *models.Stop, i *models.AlertInput) (*models.Alert, error) {
+func (r alert) Persist(s *models.StopTime, i *models.AlertInput) (*models.Alert, error) {
 	a := i.ToEntity()
 	var err error
 
-	a.CodeTrain = *s.Train.Code
+	a.CodeTrain = s.Trip.Code
 	a.StationID = s.StationID
 	a.Station = s.Station
 	a.Action, err = Action.FindOne(*a.ActionID)
