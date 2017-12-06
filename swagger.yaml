@@ -430,8 +430,8 @@ definitions:
         type: string
         minLength: 8
         maxLength: 8
-      is_realtime:
-        description: If the station is available for realtime API
+      is_enable:
+        description: If the station is enable for realtime API
         type: boolean
   Trip:
     type: object

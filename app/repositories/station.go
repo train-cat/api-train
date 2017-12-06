@@ -27,7 +27,7 @@ func (r station) Persist(i *models.StationInput) (*models.Station, error) {
 func (r station) FindAll(f filters.Filter) (*models.Collection, error) {
 	stations := []*models.Station{}
 
-	db := db.Model(models.Station{}).Where("is_realtime = 1")
+	db := db.Model(models.Station{}).Where("is_enable = 1")
 
 	return NewCollection(f, db, &stations)
 }

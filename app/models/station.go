@@ -8,9 +8,9 @@ import (
 type (
 	// StationData is all fields can be send by the client
 	StationData struct {
-		Name       *string `gorm:"column:name"        json:"name"        validate:"required,min=2,max=255"`
-		UIC        *string `gorm:"column:UIC"         json:"uic"         validate:"required,len=8"`
-		IsRealTime *bool   `gorm:"column:is_realtime" json:"is_realtime" validate:"required"`
+		Name     *string `gorm:"column:name"        json:"name"        validate:"required,min=2,max=255"`
+		UIC      *string `gorm:"column:UIC"         json:"uic"         validate:"required,len=8"`
+		IsEnable *bool   `gorm:"column:is_enable"   json:"is_enable"   validate:"required"`
 	}
 
 	// Station of the SNCF

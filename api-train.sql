@@ -81,7 +81,7 @@ CREATE TABLE `station` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `UIC` varchar(255) DEFAULT NULL,
-  `is_realtime` tinyint(1) NOT NULL,
+  `is_enable` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_station_id` (`id`),
   UNIQUE KEY `uniq_station_uic` (`UIC`),
@@ -93,7 +93,7 @@ CREATE TABLE `station` (
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
 
-INSERT INTO `station` (`id`, `created_at`, `updated_at`, `deleted_at`, `name`, `UIC`, `is_realtime`)
+INSERT INTO `station` (`id`, `created_at`, `updated_at`, `deleted_at`, `name`, `UIC`, `is_enable`)
 VALUES
 	(1,'2017-08-03 11:59:25','2017-08-30 14:10:57',NULL,'Ablon','87545269',1),
 	(2,'2017-08-03 11:59:25','2017-09-18 22:29:39',NULL,'Achères Grand Cormier','87386052',1),
