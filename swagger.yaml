@@ -230,6 +230,34 @@ paths:
           description: resource not found
           schema:
             $ref: '#/definitions/Error'
+  '/trips/{trip_id}/terminus':
+    get:
+      tags:
+        - trip
+      summary: Retrieve terminus from a trip
+      operationId: get_terminus
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          type: integer
+          name: trip_id
+          description: Unique id of the trip
+          required: true
+        - in: header
+          description: Format response (only application/json is accepted)
+          type: string
+          name: Accept
+          default: application/json
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definition/Station'
+        '404':
+          description: resource not found
+          schema:
+            $ref: '#definition/Error'
   /users:
     post:
       tags:

@@ -32,7 +32,7 @@ func (s *StopTime) GenerateHateoas(ctx *aah.Context) error {
 	s.Hateoas = rest.Hateoas{
 		Links: rest.Links{
 			"trip": rest.Link{
-				Href: rest.GenerateURI(ctx, "get_trip", s.Trip.Code),
+				Href: rest.GenerateURI(ctx, "get_trip", s.Trip.ID),
 			},
 			"station": rest.Link{
 				Href: rest.GenerateURI(ctx, "get_station", s.StationID),

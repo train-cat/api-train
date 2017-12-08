@@ -8,8 +8,15 @@ type TripController struct {
 }
 
 // Get return one trip
-func (c *TripController) Get(id int) {
-	t, err := repositories.Trip.Find(id)
+func (c *TripController) Get(tripID int) {
+	t, err := repositories.Trip.Find(tripID)
 
 	c.get(t, err)
+}
+
+// GetTerminus return terminus of the trip
+func (c *TripController) GetTerminus(tripID uint) {
+	s, err := repositories.Station.FindTerminus(tripID)
+
+	c.get(s, err)
 }

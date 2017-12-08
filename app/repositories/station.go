@@ -55,3 +55,16 @@ func (r station) IsExist(stationID int) bool {
 
 	return exist
 }
+
+// FindTerminus return terminus of the trips
+func (r station) FindTerminus(tripID uint) (*models.Station, error) {
+	s := &models.Station{}
+
+	err := db.
+		Joins("LEFT JOIN stop_time ON stop_time.station_id = station.id").
+		Where("stop_time.trip_id = ?", tripID).
+		Order("stop_time.schedule DESC").
+		First(s).Error
+
+	return s, err
+}
