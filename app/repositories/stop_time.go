@@ -27,7 +27,7 @@ func (r stopTime) FindAllByStation(stationID int, f filters.Filter) (*models.Col
 		Joins("LEFT JOIN calendar ON trip.calendar_id = calendar.id").
 		Order("stop_time.schedule ASC").
 		Where("stop_time.station_id = ?", stationID).
-		Where("calendar.start < ? AND ? < calendar.end", today, today)
+		Where("calendar.start <= ? AND ? <= calendar.end", today, today)
 
 	return NewCollection(f, db, &stops)
 }
